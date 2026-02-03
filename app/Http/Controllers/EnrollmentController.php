@@ -2,61 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Enrollment;
 use Illuminate\Http\Request;
+use App\Models\Enrollment;
 use App\Models\Student;
 use App\Models\Course;
 
 class EnrollmentController extends Controller
 {
-   
     public function index()
     {
-        $students = Student::all();
-        $courses = Course::all();
-        return view('show_enroll', compact('students','courses'));
+        $enrollments = Enrollment::with('student','course.teacher')->get();
+        return view('enrollments.index', compact('enrollments'));
     }
-
 
     public function create()
     {
-            $students = Student::all();
-           $courses = Course::all();
-        return view('enroll', compact('students','courses'));
+        $students = Student::all();
+        $courses = Course::with('teacher')->get();
+        return view('enrollments.create', compact('students','courses'));
     }
-
 
     public function store(Request $request)
     {
-      $student = Student::find($request->student_id);
-        $student->courses()->attach($request->course_id);
-
-        return redirect()->back()->with('success','Enrolled Successfully');
+        Enrollment::create($request->all());
+        return redirect()->route('enrollments.index');
     }
-
-    public function show(Enrollment $enrollment)
-    {
-        //
-    }
-
 
     public function edit(Enrollment $enrollment)
     {
-       $students = Student::all();
+        $students = Student::all();
         $courses = Course::all();
-        return view('edit_enroll', compact('enrollment','students','courses'));
+        return view('enrollments.edit', compact('enrollment','students','courses'));
     }
-
 
     public function update(Request $request, Enrollment $enrollment)
     {
         $enrollment->update($request->all());
+        return redirect()->route('enrollments.index');
     }
-
 
     public function destroy(Enrollment $enrollment)
     {
         $enrollment->delete();
-        return redirect()->back()->with('success','Enrollment Deleted Successfully');
+        return redirect()->route('enrollments.index');
     }
 }

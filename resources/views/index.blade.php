@@ -1,58 +1,56 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Enrollment System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@extends('layouts.app')
 
-<body class="bg-light">
+@section('content')
 <div class="container mt-5">
-    <div class="card shadow">
-        <div class="card-body text-center">
+    <div class="text-center mb-4">
+        <h1 class="mb-3">Student Enrollment System</h1>
+        <p class="lead">Welcome</p>
+    </div>
 
-            <h1 class="mb-3">Welcome to Student Enrollment System</h1>
-            {{-- <p class="text-muted">Select an option to manage the system</p> --}}
+    <div class="row justify-content-center">
+        <!-- Students -->
+        <div class="col-md-3 mb-3">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h4>Students</h4>
+                    <a href="{{ route('students.index') }}" class="btn btn-primary mt-2">View Students</a>
+                    <a href="{{ route('students.create') }}" class="btn btn-success mt-2">Add Student</a>
+                </div>
+            </div>
+        </div>
 
-           
-            <h5 class="mt-4">Student Management</h5>
-            <a href="/add-student" class="btn btn-primary mt-2">Add Student</a>
-            <a href="{{ route('show_student') }}" class="btn btn-secondary mt-2">
-                View All Students
-            </a>
+        <!-- Teachers -->
+        <div class="col-md-3 mb-3">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h4>Teachers</h4>
+                    <a href="{{ route('teachers.index') }}" class="btn btn-primary mt-2">View Teachers</a>
+                    <a href="{{ route('teachers.create') }}" class="btn btn-success mt-2">Add Teacher</a>
+                </div>
+            </div>
+        </div>
 
-            <hr>
+        <!-- Courses -->
+        <div class="col-md-3 mb-3">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h4>Courses</h4>
+                    <a href="{{ route('courses.index') }}" class="btn btn-primary mt-2">View Courses</a>
+                    <a href="{{ route('courses.create') }}" class="btn btn-success mt-2">Add Course</a>
+                </div>
+            </div>
+        </div>
 
-         
-            <h5>Teacher Management</h5>
-            <a href="/add-teacher" class="btn btn-success mt-2">Add Teacher</a>
-            <a href="{{ route('show_teacher') }}" class="btn btn-success mt-2">
-                View All Teachers
-            </a>
-
-            <hr>
-
-            
-            <h5>Course Management</h5>
-            <a href="/add-course" class="btn btn-warning mt-2">Add Course</a>
-            <a href="{{ route('show_courses') }}" class="btn btn-warning mt-2">
-                View All Courses
-            </a>
-
-            <hr>
-
-           
-            <h5>Enrollment</h5>
-            <a href="/enroll" class="btn btn-danger mt-2">
-                Enroll Student to Course
-            </a>
-            <a href="{{ route('show_enroll') }}" class="btn btn-danger mt-2">
-                View Enrollments
-            </a>
-
+        <!-- Enrollments -->
+        <div class="col-md-3 mb-3">
+            <div class="card shadow text-center">
+                <div class="card-body">
+                    <h4>Enrollments</h4>
+                    <a href="{{ route('enrollments.index') }}" class="btn btn-primary mt-2">View Enrollments</a>
+                    <a href="{{ route('enrollments.create') }}" class="btn btn-success mt-2">Add Enrollment</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-</body>
-</html>
+@endsection

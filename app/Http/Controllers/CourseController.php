@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Models\Course;
 use App\Models\Teacher;
 
 class CourseController extends Controller
@@ -11,26 +11,36 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::with('teacher')->get();
-        return view('show_courses', compact('courses'));
+        return view('courses.index', compact('courses'));
     }
+
     public function create()
     {
-        $teachers = Teacher::all(); // teacher list fetch
-        return view('add_course', compact('teachers'));
+        $teachers = Teacher::all();
+        return view('courses.create', compact('teachers'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'course_name' => 'required|string',
-            'teacher_id' => 'required|exists:teachers,id',
-        ]);
+        Course::create($request->all());
+        return redirect()->route('courses.index');
+    }
 
-        Course::create([
-            'course_name' => $request->course_name,
-            'teacher_id'  => $request->teacher_id,
-        ]);
+    public function edit(Course $course)
+    {
+        $teachers = Teacher::all();
+        return view('courses.edit', compact('course','teachers'));
+    }
 
-        return redirect()->back()->with('success', 'Course added successfully');
+    public function update(Request $request, Course $course)
+    {
+        $course->update($request->all());
+        return redirect()->route('courses.index');
+    }
+
+    public function destroy(Course $course)
+    {
+        $course->delete();
+        return redirect()->route('courses.index');
     }
 }

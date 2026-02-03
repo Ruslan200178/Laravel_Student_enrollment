@@ -2,71 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Teacher;
 use Illuminate\Http\Request;
+use App\Models\Teacher;
 
 class TeacherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $teachers = Teacher::all();
-        return view('show_teacher', compact('teachers'));
+        $teachers = Teacher::with('courses')->get();
+        return view('teachers.index', compact('teachers'));
     }
 
-    public function addTeacher(Request $request)
+    public function create()
     {
-            $request->validate([
-        'first_name' => 'required',
-        'last_name'  => 'required',
-        'email'      => 'required|email',
-        'phone'      => 'required',
-    ]);
-        Teacher::create([
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'email'      => $request->email,
-            'phone'      => $request->phone,
-        ]);
-
-        return redirect('show_teacher')
-               ->with('success', 'Teacher added successfully');
+        return view('teachers.create');
     }
 
-     // Show edit form
-    public function edit($id)
+    public function store(Request $request)
     {
-        $teacher = Teacher::findOrFail($id);
-        return view('edit_teacher', compact('teacher'));
+        Teacher::create($request->all());
+        return redirect()->route('teachers.index');
     }
 
-    // Update teacher
-    public function update(Request $request, $id)
+    public function edit(Teacher $teacher)
     {
-        $teacher = Teacher::findOrFail($id);
-
-        $teacher->update([
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'email'      => $request->email,
-            'phone'      => $request->phone,
-        ]);
-
-        return redirect()->route('show_teacher')
-                         ->with('success', 'Teacher updated successfully');
+        return view('teachers.edit', compact('teacher'));
     }
 
-    // Delete teacher
-    public function destroy($id)
+    public function update(Request $request, Teacher $teacher)
     {
-        Teacher::destroy($id);
+        $teacher->update($request->all());
+        return redirect()->route('teachers.index');
+    }
 
-        return redirect()->route('show_teacher')
-                         ->with('success', 'Teacher deleted successfully');
+    public function destroy(Teacher $teacher)
+    {
+        $teacher->delete();
+        return redirect()->route('teachers.index');
     }
 }
-
